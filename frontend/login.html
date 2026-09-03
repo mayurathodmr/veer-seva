@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | VeerSeva</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Auth CSS -->
+    <link rel="stylesheet" href="assets/css/auth.css">
+
+    <style>
+        /* Small inline enhancements */
+
+        .demo-note {
+            margin-top: 18px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(212,175,55,.08);
+            border: 1px solid rgba(212,175,55,.18);
+            color: #c9d2cd;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .demo-note i {
+            color: #d4af37;
+            margin-right: 5px;
+        }
+
+        .forgot-link {
+            cursor: pointer;
+        }
+
+        .status-message {
+            display: none;
+            margin-bottom: 18px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .status-message.show {
+            display: block;
+        }
+
+        .status-message.success {
+            background: rgba(40,167,69,.15);
+            border: 1px solid rgba(40,167,69,.3);
+            color: #9ff0b0;
+        }
+
+        .status-message.error {
+            background: rgba(220,53,69,.15);
+            border: 1px solid rgba(220,53,69,.3);
+            color: #ffadb6;
+        }
+
+        .role-box {
+            position: relative;
+        }
+
+        .role-box select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 17px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #9daaa3;
+        }
+
+        .security-badge {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            margin-top: 20px;
+            color: #87948e;
+            font-size: 12px;
+        }
+
+        .security-badge i {
+            color: #d4af37;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Back Home -->
+    <a href="index.html" class="back-home">
+        <i class="fa-solid fa-arrow-left"></i>
+        Home
+    </a>
+
+
+    <!-- Main Auth Wrapper -->
+    <div class="auth-wrapper">
+
+        <!-- LEFT SIDE -->
+        <section class="auth-brand">
+
+            <div class="logo">
+                <i class="fa-solid fa-shield-heart"></i>
+            </div>
+
+            <h1>
+                Veer<span>Seva</span>
+            </h1>
+
+            <p>
+                Stand with those who stand for us.
+                Support verified heroes and their families
+                through a transparent donation platform.
+            </p>
+
+            <div class="trust-list">
+
+                <div class="trust-item">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>Verified Assistance Requests</span>
+                </div>
+
+                <div class="trust-item">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Secure & Transparent Platform</span>
+                </div>
+
+                <div class="trust-item">
+                    <i class="fa-solid fa-heart"></i>
+                    <span>Every Contribution Creates Impact</span>
+                </div>
+
+                <div class="trust-item">
+                    <i class="fa-solid fa-indian-rupee-sign"></i>
+                    <span>100% Frontend Demo Experience</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+        <section class="auth-form">
+
+            <h2>Welcome Back 👋</h2>
+
+            <p class="subtitle">
+                Sign in to continue to VeerSeva
+            </p>
+
+
+            <!-- Status -->
+            <div id="statusMessage" class="status-message"></div>
+
+
+            <!-- Login Form -->
+            <form id="loginForm">
+
+                <!-- Role -->
+                <div class="form-group">
+
+                    <label for="role">
+                        Account Type
+                    </label>
+
+                    <div class="input-box role-box">
+
+                        <i class="fa-solid fa-user-shield"></i>
+
+                        <select id="role" required>
+
+                            <option value="">
+                                Select account type
+                            </option>
+
+                            <option value="donor">
+                                Donor
+                            </option>
+
+                            <option value="army">
+                                Army Person
+                            </option>
+
+                            <option value="admin">
+                                Administrator
+                            </option>
+
+                        </select>
+
+                        <span class="select-arrow">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Email -->
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-envelope"></i>
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- Password -->
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-lock"></i>
+
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <span
+                            class="password-toggle"
+                            id="passwordToggle"
+                            title="Show password"
+                        >
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Options -->
+                <div class="form-options">
+
+                    <label class="remember">
+
+                        <input
+                            type="checkbox"
+                            id="remember"
+                        >
+
+                        Remember me
+
+                    </label>
+
+
+                    <a
+                        href="#"
+                        class="forgot-link"
+                        id="forgotPassword"
+                    >
+                        Forgot Password?
+                    </a>
+
+                </div>
+
+
+                <!-- Login Button -->
+                <button
+                    type="submit"
+                    class="login-btn"
+                    id="loginBtn"
+                >
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    <span>Sign In</span>
+
+                </button>
+
+            </form>
+
+
+            <!-- Divider -->
+            <div class="divider">
+                OR
+            </div>
+
+
+            <!-- Register -->
+            <div class="register-text">
+
+                Don't have an account?
+
+                <a href="register.html">
+                    Create Account
+                </a>
+
+            </div>
+
+
+            <!-- Security -->
+            <div class="security-badge">
+
+                <i class="fa-solid fa-lock"></i>
+
+                Secure frontend demo interface
+
+            </div>
+
+
+            <!-- Demo Note -->
+            <div class="demo-note">
+
+                <i class="fa-solid fa-circle-info"></i>
+
+                This is a frontend-only demo.
+                No real authentication or payment is processed.
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- Auth JavaScript -->
+    <script src="assets/js/auth.js"></script>
+
+</body>
+</html>

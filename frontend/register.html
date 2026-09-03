@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | VeerSeva</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="assets/css/auth.css">
+
+    <style>
+        .register-form {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .register-form::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .register-form::-webkit-scrollbar-thumb {
+            background: rgba(212,175,55,.5);
+            border-radius: 20px;
+        }
+
+        .name-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .terms {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            color: #9daaa3;
+            font-size: 12px;
+            line-height: 1.5;
+            margin: 18px 0 22px;
+        }
+
+        .terms input {
+            margin-top: 3px;
+            accent-color: #d4af37;
+        }
+
+        .terms a {
+            color: #d4af37;
+            text-decoration: none;
+        }
+
+        .success-box {
+            display: none;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        .success-box.show {
+            display: block;
+        }
+
+        .success-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(40,167,69,.15);
+            border: 1px solid rgba(40,167,69,.3);
+            color: #75e58b;
+            font-size: 30px;
+        }
+
+        .success-box h3 {
+            font-family: "Montserrat", sans-serif;
+            margin-bottom: 10px;
+        }
+
+        .success-box p {
+            color: #9daaa3;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media(max-width:500px) {
+            .name-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<a href="index.html" class="back-home">
+    <i class="fa-solid fa-arrow-left"></i>
+    Home
+</a>
+
+
+<div class="auth-wrapper">
+
+    <!-- LEFT -->
+
+    <section class="auth-brand">
+
+        <div class="logo">
+            <i class="fa-solid fa-shield-heart"></i>
+        </div>
+
+        <h1>
+            Join <span>VeerSeva</span>
+        </h1>
+
+        <p>
+            Become part of a community supporting verified
+            heroes and their families.
+        </p>
+
+        <div class="trust-list">
+
+            <div class="trust-item">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Simple Registration</span>
+            </div>
+
+            <div class="trust-item">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Verified Assistance</span>
+            </div>
+
+            <div class="trust-item">
+                <i class="fa-solid fa-hand-holding-heart"></i>
+                <span>Make a Real Impact</span>
+            </div>
+
+            <div class="trust-item">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <span>Mobile Friendly Experience</span>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- RIGHT -->
+
+    <section class="auth-form register-form">
+
+        <h2>Create Account ✨</h2>
+
+        <p class="subtitle">
+            Join the VeerSeva community today
+        </p>
+
+
+        <div id="registerMessage"
+             class="status-message">
+        </div>
+
+
+        <form id="registerForm">
+
+
+            <!-- NAME -->
+
+            <div class="name-row">
+
+                <div class="form-group">
+
+                    <label for="firstName">
+                        First Name
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="firstName"
+                            placeholder="First name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="lastName">
+                        Last Name
+                    </label>
+
+                    <div class="input-box">
+
+                        <i class="fa-solid fa-user"></i>
+
+                        <input
+                            type="text"
+                            id="lastName"
+                            placeholder="Last name"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ROLE -->
+
+            <div class="form-group">
+
+                <label for="registerRole">
+                    Account Type
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fa-solid fa-users"></i>
+
+                    <select id="registerRole" required>
+
+                        <option value="">
+                            Select account type
+                        </option>
+
+                        <option value="donor">
+                            Donor
+                        </option>
+
+                        <option value="army">
+                            Army Person
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="registerEmail">
+                    Email Address
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fa-solid fa-envelope"></i>
+
+                    <input
+                        type="email"
+                        id="registerEmail"
+                        placeholder="Enter email address"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PHONE -->
+
+            <div class="form-group">
+
+                <label for="phone">
+                    Mobile Number
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fa-solid fa-phone"></i>
+
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="10 digit mobile number"
+                        maxlength="10"
+                        inputmode="numeric"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="registerPassword">
+                    Password
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="registerPassword"
+                        placeholder="Create password"
+                        minlength="6"
+                        required
+                    >
+
+                    <span
+                        class="password-toggle"
+                        id="registerPasswordToggle">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="confirmPassword">
+                    Confirm Password
+                </label>
+
+                <div class="input-box">
+
+                    <i class="fa-solid fa-lock"></i>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm password"
+                        minlength="6"
+                        required
+                    >
+
+                    <span
+                        class="password-toggle"
+                        id="confirmPasswordToggle">
+
+                        <i class="fa-solid fa-eye"></i>
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- TERMS -->
+
+            <label class="terms">
+
+                <input
+                    type="checkbox"
+                    id="terms"
+                    required
+                >
+
+                <span>
+                    I agree to the
+                    <a href="#">Terms & Conditions</a>
+                    and
+                    <a href="#">Privacy Policy</a>.
+                </span>
+
+            </label>
+
+
+            <!-- BUTTON -->
+
+            <button
+                type="submit"
+                class="login-btn"
+                id="registerBtn">
+
+                <i class="fa-solid fa-user-plus"></i>
+
+                Create Account
+
+            </button>
+
+        </form>
+
+
+        <!-- SUCCESS -->
+
+        <div id="successBox" class="success-box">
+
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <h3>Account Created! 🎉</h3>
+
+            <p>
+                Your account has been created successfully.
+            </p>
+
+            <br>
+
+            <a href="login.html"
+               class="login-btn"
+               style="display:block;text-decoration:none;">
+                Continue to Login
+            </a>
+
+        </div>
+
+
+        <div class="divider">
+            OR
+        </div>
+
+
+        <div class="register-text">
+
+            Already have an account?
+
+            <a href="login.html">
+                Sign In
+            </a>
+
+        </div>
+
+
+        <div class="security-badge">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            Secure Account Registration • Your password is protected
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<script src="assets/js/register.js"></script>
+
+</body>
+</html>

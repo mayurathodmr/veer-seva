@@ -1,0 +1,118 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("registerForm");
+
+    const password =
+        document.getElementById("registerPassword");
+
+    const confirmPassword =
+        document.getElementById("confirmPassword");
+
+    const passwordToggle =
+        document.getElementById("registerPasswordToggle");
+
+    const confirmToggle =
+        document.getElementById("confirmPasswordToggle");
+
+    const message =
+        document.getElementById("registerMessage");
+
+    const successBox =
+        document.getElementById("successBox");
+
+
+    function togglePassword(input, button) {
+
+        button.addEventListener("click", function () {
+
+            if (input.type === "password") {
+
+                input.type = "text";
+
+                button.innerHTML =
+                    '<i class="fa-solid fa-eye-slash"></i>';
+
+            } else {
+
+                input.type = "password";
+
+                button.innerHTML =
+                    '<i class="fa-solid fa-eye"></i>';
+
+            }
+
+        });
+
+    }
+
+
+    togglePassword(password, passwordToggle);
+    togglePassword(confirmPassword, confirmToggle);
+
+
+    form.addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+        const pass = password.value;
+        const confirm = confirmPassword.value;
+
+        message.className = "status-message";
+        message.textContent = "";
+
+
+        if (pass.length < 6) {
+
+            message.textContent =
+                "Password must contain at least 6 characters.";
+
+            message.classList.add("show", "error");
+
+            return;
+        }
+
+
+        if (pass !== confirm) {
+
+            message.textContent =
+                "Passwords do not match.";
+
+            message.classList.add("show", "error");
+
+            return;
+        }
+
+
+        const phone =
+            document.getElementById("phone").value.trim();
+
+        if (!/^[0-9]{10}$/.test(phone)) {
+
+            message.textContent =
+                "Please enter a valid 10 digit mobile number.";
+
+            message.classList.add("show", "error");
+
+            return;
+        }
+
+
+        message.textContent =
+            "Creating your frontend demo account...";
+
+        message.classList.add("show", "success");
+
+
+        setTimeout(function () {
+
+            form.style.display = "none";
+
+            message.style.display = "none";
+
+            successBox.classList.add("show");
+
+        }, 900);
+
+    });
+
+});

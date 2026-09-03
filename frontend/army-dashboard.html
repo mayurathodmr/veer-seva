@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Army Dashboard | VeerSeva</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/army-dashboard.css">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+
+      <div>
+        <h4>VeerSeva</h4>
+        <small>ARMY PORTAL</small>
+      </div>
+    </div>
+
+    <nav class="navigation">
+
+      <a href="#" class="nav-link active">
+        <i class="fa-solid fa-house"></i>
+        Dashboard
+      </a>
+
+      <a href="#requests" class="nav-link">
+        <i class="fa-solid fa-file-lines"></i>
+        My Requests
+      </a>
+
+      <a href="#create" class="nav-link">
+        <i class="fa-solid fa-circle-plus"></i>
+        Create Request
+      </a>
+
+      <a href="#profile" class="nav-link">
+        <i class="fa-solid fa-user"></i>
+        My Profile
+      </a>
+
+      <a href="#notifications" class="nav-link">
+        <i class="fa-solid fa-bell"></i>
+        Notifications
+      </a>
+
+      <a href="#settings" class="nav-link">
+        <i class="fa-solid fa-gear"></i>
+        Settings
+      </a>
+
+    </nav>
+
+    <div class="sidebar-footer">
+
+      <div class="secure-box">
+        <i class="fa-solid fa-lock"></i>
+        <strong>Secure Portal</strong>
+        <p>Frontend demonstration environment.</p>
+      </div>
+
+      <a href="index.html">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to Website
+      </a>
+
+      <a href="login.html" class="logout">
+        <i class="fa-solid fa-right-from-bracket"></i>
+        Logout
+      </a>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+
+      <button class="menu-btn" id="menuBtn">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div>
+        <span class="top-label">ARMY PERSONNEL PORTAL</span>
+        <h2>Dashboard</h2>
+      </div>
+
+      <div class="top-right">
+
+        <button class="notification-btn" onclick="showNotifications()">
+          <i class="fa-regular fa-bell"></i>
+          <span></span>
+        </button>
+
+        <div class="user">
+          <div class="avatar">AR</div>
+
+          <div class="user-info">
+            <strong>Arjun Rathod</strong>
+            <small>Verified Personnel</small>
+          </div>
+
+          <i class="fa-solid fa-chevron-down"></i>
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <!-- CONTENT -->
+    <div class="content">
+
+
+      <!-- HERO -->
+      <section class="hero">
+
+        <div class="hero-content">
+
+          <div class="hero-icon">
+            <i class="fa-solid fa-person-military-pointing"></i>
+          </div>
+
+          <div>
+            <span class="gold-label">WELCOME TO VEERSEVA</span>
+
+            <h1>
+              Jai Hind, <span>Arjun!</span> 🇮🇳
+            </h1>
+
+            <p>
+              Your service matters. We're here to help connect
+              verified welfare requests with compassionate donors.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="verified-status">
+          <i class="fa-solid fa-circle-check"></i>
+          <div>
+            <strong>Verified</strong>
+            <small>Identity Verified</small>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- STATS -->
+      <section class="stats">
+
+        <div class="stat">
+
+          <div class="stat-icon green">
+            <i class="fa-solid fa-file-circle-check"></i>
+          </div>
+
+          <div>
+            <span>My Requests</span>
+            <h3>04</h3>
+            <small>2 active requests</small>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon gold">
+            <i class="fa-solid fa-indian-rupee-sign"></i>
+          </div>
+
+          <div>
+            <span>Total Received</span>
+            <h3>₹3.48L</h3>
+            <small>Across approved requests</small>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon blue">
+            <i class="fa-solid fa-users"></i>
+          </div>
+
+          <div>
+            <span>Donors</span>
+            <h3>126</h3>
+            <small>People supported</small>
+          </div>
+
+        </div>
+
+
+        <div class="stat">
+
+          <div class="stat-icon orange">
+            <i class="fa-solid fa-medal"></i>
+          </div>
+
+          <div>
+            <span>Profile Status</span>
+            <h3>100%</h3>
+            <small>Fully verified</small>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- QUICK ACTIONS -->
+      <section class="quick-section">
+
+        <div class="section-title">
+
+          <div>
+            <span class="label">QUICK ACTIONS</span>
+            <h2>What would you like to do?</h2>
+          </div>
+
+        </div>
+
+
+        <div class="quick-grid">
+
+          <button class="quick-card" onclick="openRequestModal()">
+
+            <div class="quick-icon">
+              <i class="fa-solid fa-plus"></i>
+            </div>
+
+            <div>
+              <strong>Create Welfare Request</strong>
+              <span>Submit a new assistance request</span>
+            </div>
+
+            <i class="fa-solid fa-arrow-right arrow"></i>
+
+          </button>
+
+
+          <button class="quick-card" onclick="scrollToRequests()">
+
+            <div class="quick-icon blue">
+              <i class="fa-solid fa-chart-simple"></i>
+            </div>
+
+            <div>
+              <strong>Track My Requests</strong>
+              <span>View status and progress</span>
+            </div>
+
+            <i class="fa-solid fa-arrow-right arrow"></i>
+
+          </button>
+
+
+          <button class="quick-card" onclick="showProfile()">
+
+            <div class="quick-icon gold">
+              <i class="fa-solid fa-user-pen"></i>
+            </div>
+
+            <div>
+              <strong>Update Profile</strong>
+              <span>Manage your information</span>
+            </div>
+
+            <i class="fa-solid fa-arrow-right arrow"></i>
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- REQUESTS -->
+      <section class="requests-section" id="requests">
+
+        <div class="section-header">
+
+          <div>
+            <span class="label">ASSISTANCE REQUESTS</span>
+            <h2>My Requests</h2>
+          </div>
+
+          <button class="outline-btn" onclick="openRequestModal()">
+            <i class="fa-solid fa-plus"></i>
+            New Request
+          </button>
+
+        </div>
+
+
+        <div class="request-table">
+
+          <!-- REQUEST 1 -->
+          <div class="request-row">
+
+            <div class="request-symbol medical">
+              <i class="fa-solid fa-kit-medical"></i>
+            </div>
+
+            <div class="request-info">
+              <strong>Medical Treatment Assistance</strong>
+              <span>Request ID: VS-REQ-1024</span>
+            </div>
+
+            <div class="request-progress">
+
+              <div class="progress-text">
+                <span>₹1,42,500 / ₹2,00,000</span>
+                <strong>71%</strong>
+              </div>
+
+              <div class="progress-bar">
+                <div style="width:71%"></div>
+              </div>
+
+            </div>
+
+            <span class="request-status active">
+              Active
+            </span>
+
+            <button class="view-btn" onclick="viewRequest('VS-REQ-1024')">
+              View
+            </button>
+
+          </div>
+
+
+          <!-- REQUEST 2 -->
+          <div class="request-row">
+
+            <div class="request-symbol education">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+
+            <div class="request-info">
+              <strong>Child Education Support</strong>
+              <span>Request ID: VS-REQ-0972</span>
+            </div>
+
+            <div class="request-progress">
+
+              <div class="progress-text">
+                <span>₹92,000 / ₹1,00,000</span>
+                <strong>92%</strong>
+              </div>
+
+              <div class="progress-bar">
+                <div style="width:92%"></div>
+              </div>
+
+            </div>
+
+            <span class="request-status active">
+              Active
+            </span>
+
+            <button class="view-btn" onclick="viewRequest('VS-REQ-0972')">
+              View
+            </button>
+
+          </div>
+
+
+          <!-- REQUEST 3 -->
+          <div class="request-row">
+
+            <div class="request-symbol family">
+              <i class="fa-solid fa-house-heart"></i>
+            </div>
+
+            <div class="request-info">
+              <strong>Family Welfare Assistance</strong>
+              <span>Request ID: VS-REQ-0815</span>
+            </div>
+
+            <div class="request-progress">
+
+              <div class="progress-text">
+                <span>₹1,13,500 / ₹1,13,500</span>
+                <strong>100%</strong>
+              </div>
+
+              <div class="progress-bar">
+                <div style="width:100%"></div>
+              </div>
+
+            </div>
+
+            <span class="request-status completed">
+              Completed
+            </span>
+
+            <button class="view-btn" onclick="viewRequest('VS-REQ-0815')">
+              View
+            </button>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- VERIFICATION -->
+      <section class="verification">
+
+        <div class="verification-icon">
+          <i class="fa-solid fa-shield-heart"></i>
+        </div>
+
+        <div class="verification-content">
+
+          <span class="label">VERIFICATION STATUS</span>
+
+          <h2>Your profile is verified</h2>
+
+          <p>
+            Your identity and submitted documents have successfully
+            passed the frontend verification workflow.
+          </p>
+
+          <div class="verification-items">
+
+            <span>
+              <i class="fa-solid fa-circle-check"></i>
+              Identity
+            </span>
+
+            <span>
+              <i class="fa-solid fa-circle-check"></i>
+              Service Details
+            </span>
+
+            <span>
+              <i class="fa-solid fa-circle-check"></i>
+              Documents
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="verification-badge">
+          <i class="fa-solid fa-check"></i>
+          VERIFIED
+        </div>
+
+      </section>
+
+
+      <!-- PROFILE -->
+      <section class="profile-card" id="profile">
+
+        <div class="profile-heading">
+
+          <div>
+            <span class="label">PERSONAL INFORMATION</span>
+            <h2>My Profile</h2>
+          </div>
+
+          <button class="outline-btn" onclick="showProfile()">
+            Edit Profile
+          </button>
+
+        </div>
+
+
+        <div class="profile-grid">
+
+          <div>
+            <span>Full Name</span>
+            <strong>Arjun Rathod</strong>
+          </div>
+
+          <div>
+            <span>Service Status</span>
+            <strong>Serving Personnel</strong>
+          </div>
+
+          <div>
+            <span>Category</span>
+            <strong>Army Personnel</strong>
+          </div>
+
+          <div>
+            <span>Verification</span>
+            <strong class="verified">
+              <i class="fa-solid fa-circle-check"></i>
+              Verified
+            </strong>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- DISCLAIMER -->
+      <div class="disclaimer">
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        <span>
+          VeerSeva is a frontend project/demo concept and is not
+          an official website of the Indian Army or Government of India.
+          All information displayed here is demonstration data.
+        </span>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- CREATE REQUEST MODAL -->
+<div class="modal" id="requestModal">
+
+  <div class="modal-card">
+
+    <button class="close" onclick="closeRequestModal()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <div class="modal-header">
+
+      <div class="modal-icon">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+      </div>
+
+      <span class="label">NEW REQUEST</span>
+
+      <h2>Create Welfare Request</h2>
+
+      <p>
+        Submit details for your assistance request.
+      </p>
+
+    </div>
+
+
+    <form id="requestForm">
+
+      <div class="field">
+
+        <label>Request Category</label>
+
+        <select id="category" required>
+
+          <option value="">Select category</option>
+          <option>Medical Assistance</option>
+          <option>Education Support</option>
+          <option>Family Assistance</option>
+          <option>Emergency Support</option>
+          <option>Other Welfare</option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Request Title</label>
+
+        <input
+          type="text"
+          id="requestTitle"
+          placeholder="Enter request title"
+          required
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Required Amount</label>
+
+        <div class="amount-input">
+          <span>₹</span>
+
+          <input
+            type="number"
+            id="requiredAmount"
+            placeholder="Enter amount"
+            min="100"
+            required
+          >
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Description</label>
+
+        <textarea
+          id="description"
+          rows="4"
+          placeholder="Describe your assistance requirement..."
+          required
+        ></textarea>
+
+      </div>
+
+
+      <button class="submit-btn" type="submit">
+        Submit Request
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+
+      <small class="demo-note">
+        <i class="fa-solid fa-circle-info"></i>
+        Frontend demo only. Request is not actually submitted.
+      </small>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<script src="assets/js/army-dashboard.js"></script>
+
+</body>
+</html>

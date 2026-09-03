@@ -1,0 +1,378 @@
+const express = require("express");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const db = require("../database/db");
+
+const router = express.Router();
+
+const JWT_SECRET =
+    process.env.JWT_SECRET || "change-this-secret";
+
+
+// ==========================================
+// REGISTER
+// ==========================================
+
+router.post("/register", async (req, res) => {
+
+    try {
+
+        const {
+            firstName,
+            lastName,
+            email,
+            phone,
+            password,
+            role
+        } = req.body;
+
+
+        if (
+            !firstName ||
+            !lastName ||
+            !email ||
+            !phone ||
+            !password ||
+            !role
+        ) {
+
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required."
+            });
+        }
+
+
+        const cleanEmail =
+            email.trim().toLowerCase();
+
+
+        if (!["donor", "army"].includes(role)) {
+
+            return res.status(400).json({
+                success: false,
+                message: "Invalid registration role."
+            });
+        }
+
+
+        if (password.length < 8) {
+
+            return res.status(400).json({
+                success: false,
+                message:
+                    "Password must contain at least 8 characters."
+            });
+        }
+
+
+        db.users.findOne(
+            { email: cleanEmail },
+            async (err, existingUser) => {
+
+                if (err) {
+
+                    console.error(err);
+
+                    return res.status(500).json({
+                        success: false,
+                        message: "Database error."
+                    });
+                }
+
+
+                if (existingUser) {
+
+                    return res.status(409).json({
+                        success: false,
+                        message:
+                            "An account with this email already exists."
+                    });
+                }
+
+
+                const passwordHash =
+                    await bcrypt.hash(password, 12);
+
+
+                const newUser = {
+
+                    firstName: firstName.trim(),
+
+                    lastName: lastName.trim(),
+
+                    email: cleanEmail,
+
+                    phone: phone.trim(),
+
+                    passwordHash,
+
+                    role,
+
+                    isVerified:
+                        role === "donor",
+
+                    createdAt:
+                        new Date().toISOString()
+                };
+
+
+                db.users.insert(
+                    newUser,
+                    (insertErr, user) => {
+
+                        if (insertErr) {
+
+                            console.error(insertErr);
+
+                            return res.status(500).json({
+                                success: false,
+                                message:
+                                    "Unable to create account."
+                            });
+                        }
+
+
+                        return res.status(201).json({
+
+                            success: true,
+
+                            message:
+                                "Account created successfully.",
+
+                            user: {
+
+                                id: user._id,
+
+                                firstName:
+                                    user.firstName,
+
+                                lastName:
+                                    user.lastName,
+
+                                email:
+                                    user.email,
+
+                                role:
+                                    user.role
+                            }
+                        });
+
+                    }
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            success: false,
+            message: "Server error."
+        });
+    }
+});
+
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+router.post("/login", (req, res) => {
+
+    const {
+        email,
+        password,
+        role
+    } = req.body;
+
+
+    if (!email || !password || !role) {
+
+        return res.status(400).json({
+            success: false,
+            message:
+                "Email, password and role are required."
+        });
+    }
+
+
+    const cleanEmail =
+        email.trim().toLowerCase();
+
+
+    db.users.findOne(
+        { email: cleanEmail },
+        async (err, user) => {
+
+            if (err) {
+
+                console.error(err);
+
+                return res.status(500).json({
+                    success: false,
+                    message: "Database error."
+                });
+            }
+
+
+            if (!user) {
+
+                return res.status(401).json({
+                    success: false,
+                    message:
+                        "Invalid email or password."
+                });
+            }
+
+
+            // Prevent role mismatch
+
+            if (user.role !== role) {
+
+                return res.status(403).json({
+                    success: false,
+                    message:
+                        "This account is not registered with the selected role."
+                });
+            }
+
+
+            const passwordValid =
+                await bcrypt.compare(
+                    password,
+                    user.passwordHash
+                );
+
+
+            if (!passwordValid) {
+
+                return res.status(401).json({
+                    success: false,
+                    message:
+                        "Invalid email or password."
+                });
+            }
+
+
+            // Create JWT
+
+            const token =
+                jwt.sign(
+                    {
+                        id: user._id,
+                        email: user.email,
+                        role: user.role
+                    },
+                    JWT_SECRET,
+                    {
+                        expiresIn: "7d"
+                    }
+                );
+
+
+            // HTTP-only authentication cookie
+
+            res.cookie(
+                "veerSevaToken",
+                token,
+                {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: "lax",
+                    maxAge:
+                        7 * 24 * 60 * 60 * 1000
+                }
+            );
+
+
+            return res.json({
+
+                success: true,
+
+                message:
+                    "Login successful.",
+
+                user: {
+
+                    id: user._id,
+
+                    firstName:
+                        user.firstName,
+
+                    lastName:
+                        user.lastName,
+
+                    email:
+                        user.email,
+
+                    role:
+                        user.role
+                }
+            });
+
+        }
+    );
+
+});
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+router.post("/logout", (req, res) => {
+
+    res.clearCookie(
+        "veerSevaToken",
+        {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        }
+    );
+
+
+    res.json({
+
+        success: true,
+
+        message:
+            "Logged out successfully."
+    });
+});
+
+
+module.exports = router;
+
+const { requireAuth } = require("../middleware/auth");
+
+router.get("/me", requireAuth, (req, res) => {
+  db.users.findOne(
+    { _id: req.user.id },
+    (err, user) => {
+      if (err || !user) {
+        return res.status(401).json({
+          success: false,
+          message: "User not found."
+        });
+      }
+
+      res.json({
+        success: true,
+        user: {
+          id: user._id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          phone: user.phone,
+          role: user.role,
+          isVerified: user.isVerified,
+          createdAt: user.createdAt
+        }
+      });
+    }
+  );
+});
