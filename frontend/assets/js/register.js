@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:5000";
+const API_URL = "https://veer-seva.onrender.com";
 
 const successStyle = document.createElement("style");
 
