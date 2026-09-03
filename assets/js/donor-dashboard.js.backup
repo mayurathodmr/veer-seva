@@ -1,0 +1,232 @@
+const API_URL = "http://127.0.0.1:5000";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const mobileMenu = document.getElementById("mobileMenu");
+  const sidebar = document.getElementById("sidebar");
+
+  if (mobileMenu && sidebar) {
+    mobileMenu.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+    });
+  }
+
+  document.querySelectorAll(".nav-item").forEach(item => {
+    item.addEventListener("click", () => {
+      document.querySelectorAll(".nav-item")
+        .forEach(nav => nav.classList.remove("active"));
+
+      item.classList.add("active");
+
+      if (window.innerWidth <= 800 && sidebar) {
+        sidebar.classList.remove("open");
+      }
+    });
+  });
+
+  await verifyDonorSession();
+});
+
+
+async function verifyDonorSession() {
+  try {
+    const response = await fetch(`${API_URL}/api/auth/me`, {
+      method: "GET",
+      credentials: "include"
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    if (data.user.role !== "donor") {
+      alert("You are not authorized to access the Donor Dashboard.");
+      window.location.href = "login.html";
+      return;
+    }
+
+    window.currentUser = data.user;
+
+    updateUserUI(data.user);
+
+  } catch (error) {
+    console.error("Authentication error:", error);
+    window.location.href = "login.html";
+  }
+}
+
+
+function updateUserUI(user) {
+  const name =
+    `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+  document.querySelectorAll("[data-user-name]").forEach(el => {
+    el.textContent = name || "Donor";
+  });
+
+  document.querySelectorAll("[data-user-email]").forEach(el => {
+    el.textContent = user.email || "";
+  });
+
+  document.querySelectorAll("[data-user-role]").forEach(el => {
+    el.textContent = "Verified Donor";
+  });
+}
+
+
+let selectedRequest = "";
+let selectedGoal = 0;
+let selectedAmount = 0;
+
+
+function openDonation(requestName, goal) {
+  selectedRequest = requestName;
+  selectedGoal = goal;
+
+  const modal = document.getElementById("donationModal");
+  const requestText = document.getElementById("donationRequest");
+
+  if (requestText) {
+    requestText.textContent = requestName;
+  }
+
+  const customAmount = document.getElementById("customAmount");
+
+  if (customAmount) {
+    customAmount.value = "";
+  }
+
+  document.querySelectorAll(".amount-grid button")
+    .forEach(btn => btn.classList.remove("selected"));
+
+  selectedAmount = 0;
+
+  if (modal) {
+    modal.classList.add("show");
+  }
+}
+
+
+function closeDonation() {
+  const modal = document.getElementById("donationModal");
+
+  if (modal) {
+    modal.classList.remove("show");
+  }
+}
+
+
+function selectAmount(amount) {
+  selectedAmount = Number(amount);
+
+  const customAmount = document.getElementById("customAmount");
+
+  if (customAmount) {
+    customAmount.value = selectedAmount;
+  }
+
+  document.querySelectorAll(".amount-grid button")
+    .forEach(btn => btn.classList.remove("selected"));
+
+  document.querySelectorAll(".amount-grid button")
+    .forEach(btn => {
+      const value = parseInt(
+        btn.innerText.replace(/[₹,]/g, ""),
+        10
+      );
+
+      if (value === selectedAmount) {
+        btn.classList.add("selected");
+      }
+    });
+}
+
+
+function processDonation() {
+  const customAmount =
+    Number(document.getElementById("customAmount")?.value || 0);
+
+  const amount = customAmount || selectedAmount;
+
+  if (!amount || amount < 100) {
+    alert("Please enter a donation amount of at least ₹100.");
+    return;
+  }
+
+  alert(
+    "Donation payment module is being connected to the secure payment backend.\n\n" +
+    "Request: " + selectedRequest +
+    "\nAmount: ₹" + amount.toLocaleString("en-IN")
+  );
+}
+
+
+function scrollToRequests() {
+  document.getElementById("requests")?.scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+
+function showNotifications() {
+  alert("Notifications will be loaded from the real notification service.");
+}
+
+
+function showSupport() {
+  alert("VeerSeva Support");
+}
+
+
+function showAllRequests() {
+  document.getElementById("requests")?.scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+
+function showHistory() {
+  document.getElementById("history")?.scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+
+function showImpact() {
+  document.getElementById("impact")?.scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+
+function showProfile() {
+  if (!window.currentUser) return;
+
+  const user = window.currentUser;
+
+  alert(
+    `Profile\n\n` +
+    `Name: ${user.firstName || ""} ${user.lastName || ""}\n` +
+    `Email: ${user.email || ""}\n` +
+    `Phone: ${user.phone || ""}\n` +
+    `Role: Donor`
+  );
+}
+
+
+document.addEventListener("click", event => {
+  const modal = document.getElementById("donationModal");
+
+  if (modal && event.target === modal) {
+    closeDonation();
+  }
+});
+
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeDonation();
+  }
+});

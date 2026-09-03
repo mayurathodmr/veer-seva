@@ -1,0 +1,443 @@
+const API_URL = "http://127.0.0.1:5000";
+
+let currentUser = null;
+
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const mobileMenu = document.getElementById("mobileMenu");
+  const sidebar = document.getElementById("sidebar");
+
+  if (mobileMenu && sidebar) {
+    mobileMenu.addEventListener("click", () => {
+      sidebar.classList.toggle("open");
+    });
+  }
+
+  await loadCurrentUser();
+
+});
+
+
+async function loadCurrentUser() {
+
+  try {
+
+    const response = await fetch(
+      `${API_URL}/api/auth/me`,
+      {
+        credentials: "include"
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      window.location.href = "login.html";
+      return;
+    }
+
+    currentUser = data.user;
+    window.currentUser = currentUser;
+
+    if (currentUser.role !== "donor") {
+      window.location.href = "login.html";
+      return;
+    }
+
+    updateDashboardUser(currentUser);
+
+  } catch (error) {
+
+    console.error("User session error:", error);
+
+    alert("Unable to load your account. Please login again.");
+
+    window.location.href = "login.html";
+  }
+}
+
+
+/* ================= REAL USER DATA ================= */
+
+function updateDashboardUser(user) {
+
+  const fullName =
+    `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+  const firstName =
+    user.firstName || "Donor";
+
+  // Elements specifically prepared for dynamic user data
+  document.querySelectorAll("[data-user-name]").forEach(el => {
+    el.textContent = fullName;
+  });
+
+  document.querySelectorAll("[data-user-first-name]").forEach(el => {
+    el.textContent = firstName;
+  });
+
+  document.querySelectorAll("[data-user-email]").forEach(el => {
+    el.textContent = user.email || "—";
+  });
+
+  document.querySelectorAll("[data-user-phone]").forEach(el => {
+    el.textContent = user.phone || "—";
+  });
+
+  document.querySelectorAll("[data-user-role]").forEach(el => {
+    el.textContent = "Donor";
+  });
+
+  document.querySelectorAll("[data-user-status]").forEach(el => {
+    el.textContent = user.isVerified
+      ? "Verified"
+      : "Active";
+  });
+
+  document.querySelectorAll("[data-user-created]").forEach(el => {
+
+    if (!user.createdAt) {
+      el.textContent = "—";
+      return;
+    }
+
+    el.textContent =
+      new Date(user.createdAt).toLocaleDateString(
+        "en-IN",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        }
+      );
+  });
+
+  // Browser title
+  document.title = `${fullName} • VeerSeva Donor Portal`;
+}
+
+
+/* ================= PROFILE ================= */
+
+function showProfile() {
+
+  if (!currentUser) {
+    return;
+  }
+
+  const old = document.getElementById("realProfileModal");
+
+  if (old) {
+    old.remove();
+  }
+
+  const user = currentUser;
+
+  const fullName =
+    `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+  const joined =
+    user.createdAt
+      ? new Date(user.createdAt).toLocaleDateString(
+          "en-IN",
+          {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+          }
+        )
+      : "—";
+
+  const modal = document.createElement("div");
+
+  modal.id = "realProfileModal";
+
+  modal.innerHTML = `
+
+    <style>
+
+      #realProfileModal{
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+        background:rgba(0,20,14,.78);
+        backdrop-filter:blur(14px);
+      }
+
+      .real-profile-card{
+        width:min(440px,100%);
+        background:linear-gradient(145deg,#123f31,#08251d);
+        border:1px solid rgba(242,201,76,.35);
+        border-radius:28px;
+        padding:30px;
+        color:white;
+        box-shadow:0 30px 90px rgba(0,0,0,.6);
+        animation:profileIn .35s ease;
+      }
+
+      @keyframes profileIn{
+        from{
+          opacity:0;
+          transform:translateY(25px) scale(.94);
+        }
+        to{
+          opacity:1;
+          transform:translateY(0) scale(1);
+        }
+      }
+
+      .profile-top{
+        text-align:center;
+        padding-bottom:22px;
+      }
+
+      .profile-avatar{
+        width:82px;
+        height:82px;
+        margin:auto;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        background:linear-gradient(135deg,#f5d354,#dcae28);
+        color:#12352a;
+        font-size:28px;
+        font-weight:900;
+        box-shadow:0 12px 35px rgba(242,201,76,.25);
+      }
+
+      .profile-top h2{
+        margin:15px 0 5px;
+        font-size:25px;
+      }
+
+      .profile-badge{
+        display:inline-block;
+        padding:6px 12px;
+        border-radius:20px;
+        background:rgba(242,201,76,.13);
+        color:#f4d35c;
+        font-size:12px;
+        font-weight:700;
+      }
+
+      .profile-data{
+        display:grid;
+        gap:10px;
+        margin-top:5px;
+      }
+
+      .profile-row{
+        padding:13px 15px;
+        border-radius:14px;
+        background:rgba(255,255,255,.055);
+        border:1px solid rgba(255,255,255,.07);
+      }
+
+      .profile-label{
+        display:block;
+        color:rgba(255,255,255,.45);
+        font-size:10px;
+        text-transform:uppercase;
+        letter-spacing:1px;
+        margin-bottom:4px;
+      }
+
+      .profile-value{
+        font-size:14px;
+        font-weight:600;
+        word-break:break-word;
+      }
+
+      .profile-close{
+        width:100%;
+        margin-top:20px;
+        padding:14px;
+        border:0;
+        border-radius:14px;
+        background:linear-gradient(135deg,#f5d354,#e5b932);
+        color:#12352a;
+        font-weight:800;
+        cursor:pointer;
+      }
+
+    </style>
+
+    <div class="real-profile-card">
+
+      <div class="profile-top">
+
+        <div class="profile-avatar">
+          ${getInitials(fullName)}
+        </div>
+
+        <h2>${escapeHTML(fullName)}</h2>
+
+        <span class="profile-badge">
+          ✓ ${user.isVerified ? "Verified Donor" : "Donor Account"}
+        </span>
+
+      </div>
+
+      <div class="profile-data">
+
+        <div class="profile-row">
+          <span class="profile-label">Full Name</span>
+          <span class="profile-value">
+            ${escapeHTML(fullName)}
+          </span>
+        </div>
+
+        <div class="profile-row">
+          <span class="profile-label">Email Address</span>
+          <span class="profile-value">
+            ${escapeHTML(user.email || "—")}
+          </span>
+        </div>
+
+        <div class="profile-row">
+          <span class="profile-label">Mobile Number</span>
+          <span class="profile-value">
+            ${escapeHTML(user.phone || "—")}
+          </span>
+        </div>
+
+        <div class="profile-row">
+          <span class="profile-label">Account Type</span>
+          <span class="profile-value">
+            Donor
+          </span>
+        </div>
+
+        <div class="profile-row">
+          <span class="profile-label">Account Status</span>
+          <span class="profile-value">
+            ${user.isVerified ? "✓ Verified" : "Active"}
+          </span>
+        </div>
+
+        <div class="profile-row">
+          <span class="profile-label">Member Since</span>
+          <span class="profile-value">
+            ${joined}
+          </span>
+        </div>
+
+      </div>
+
+      <button
+        class="profile-close"
+        onclick="closeProfile()">
+        Done
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.addEventListener("click", event => {
+    if (event.target === modal) {
+      closeProfile();
+    }
+  });
+}
+
+
+function closeProfile() {
+
+  const modal =
+    document.getElementById("realProfileModal");
+
+  if (modal) {
+    modal.remove();
+  }
+}
+
+
+function getInitials(name) {
+
+  const parts =
+    name.trim().split(/\s+/);
+
+  if (!parts.length) {
+    return "VS";
+  }
+
+  return parts
+    .slice(0, 2)
+    .map(x => x.charAt(0).toUpperCase())
+    .join("");
+}
+
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+/* ================= LOGOUT ================= */
+
+async function logout() {
+
+  try {
+
+    await fetch(
+      `${API_URL}/api/auth/logout`,
+      {
+        method:"POST",
+        credentials:"include"
+      }
+    );
+
+  } finally {
+
+    window.location.href = "login.html";
+
+  }
+}
+
+
+/* ================= NAVIGATION ================= */
+
+function showHistory() {
+  document.getElementById("history")?.scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function showImpact() {
+  document.getElementById("impact")?.scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function showAllRequests() {
+  document.getElementById("requests")?.scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function scrollToRequests() {
+  document.getElementById("requests")?.scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+function showNotifications() {
+  alert("Notifications will be connected to the real notification service.");
+}
+
+function showSupport() {
+  alert("VeerSeva Support");
+}
